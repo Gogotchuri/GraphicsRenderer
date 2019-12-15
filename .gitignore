@@ -7,6 +7,11 @@
 .vs/
 .vs
 
+Makefile
+
+.vscode/
+.vscode
+
 **/bin/**
 **/bin
 

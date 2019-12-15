@@ -35,11 +35,11 @@ project "Renderer"
 	{
 		"%{prj.location}/src",
 		"%{prj.location}/src/vendor",
-		"%{prj.location}/vendor/GLFW/include",
-		"%{prj.location}/vendor/GLAD/include"
+		"Renderer/vendor/GLFW/include",
+		"Renderer/vendor/GLAD/include"
 	}
 
-	links 
+	links
 	{
 		"GLFW",
 		"GLAD"
@@ -55,8 +55,17 @@ project "Renderer"
 		}
 
 		links{"opengl32.lib", "User32.lib", "Gdi32.lib" ,"Shell32.lib"}
-	
+
 	filter "system:linux"
 		systemversion "latest"
 
+		defines
+		{
+			"_GLFW_X11"
+		}
+
 		links{"X11", "GL", "GLU"}
+
+	configuration { "linux", "gmake" }
+		linkoptions { "-lglfw3 -lrt -lXrandr -lXinerama -lXi -lXcursor -lGL -lm -ldl -lXrender -ldrm -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lxcb-dri3 -lxcb-present -lxcb-sync -lxshmfence -lXxf86vm -lXfixes -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp" }
+

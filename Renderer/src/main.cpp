@@ -2,7 +2,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "RendererAPI.h"
-#include <glm\glm.hpp>
+#include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
@@ -22,13 +22,14 @@ void helloSquare(GLFWwindow * window);
 int main(void)
 {
 	GLFWwindow* window = Renderer::initWindow(700, 450, "GLFW Window");
-	texturedSquare(window);
+	helloSquare(window);
 	return 0;
 }
 
 void helloSquare(GLFWwindow * window) {
 
-	std::shared_ptr<Shader> shader = Shader::create(std::string("res/shaders/HelloTriangleAgain.glsl"));
+	std::shared_ptr<Shader> shader = Shader::create(
+		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/HelloTriangleAgain.glsl"));
 
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
@@ -56,10 +57,15 @@ void helloSquare(GLFWwindow * window) {
 
 	va->unbind();
 
+	float slide = 0;
+	float change = 0.01;
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
+		if(slide > 1) change = -0.01;
+		if(slide < -1) change = 0.01;
+		slide += change;
 		// input
 		// -----
 		closeOnEnter(window);
@@ -68,7 +74,7 @@ void helloSquare(GLFWwindow * window) {
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
-
+		shader->setUniform("slide", ShaderDataType::Float1, &slide);
 		// draw our first triangle
 		shader->bind();
 		va->bind();

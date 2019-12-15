@@ -23,8 +23,8 @@ public:
 	virtual const std::string& getName() const = 0;
 
 	virtual void setUniform(std::string name, ShaderDataType type, const void * data) const = 0;
-	static std::shared_ptr<Shader> create(std::string& filepath);
-	static std::shared_ptr<Shader> create(std::string& name, std::string& vertex_src, std::string& fragment_src);
+	static std::shared_ptr<Shader> create(std::string filepath);
+	static std::shared_ptr<Shader> create(std::string name, std::string& vertex_src, std::string& fragment_src);
 };
 
 #endif /* SHADER_H_ */

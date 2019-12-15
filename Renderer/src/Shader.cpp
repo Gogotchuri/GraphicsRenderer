@@ -9,7 +9,7 @@
 #include "RendererAPI.h"
 #include "OpenGL/OpenGLShader.h"
 
-std::shared_ptr<Shader> Shader::create(std::string& filepath){
+std::shared_ptr<Shader> Shader::create(std::string filepath){
 	switch(RendererAPI::getAPI()){
 		case RendererAPI::API::None:
 			//TODO assert
@@ -20,7 +20,7 @@ std::shared_ptr<Shader> Shader::create(std::string& filepath){
 	return nullptr;
 }
 
-std::shared_ptr<Shader> Shader::create(std::string& name, std::string& vertex_src, std::string& fragment_src){
+std::shared_ptr<Shader> Shader::create(std::string name, std::string& vertex_src, std::string& fragment_src){
 	switch(RendererAPI::getAPI()){
 		case RendererAPI::API::None:
 			//TODO assert

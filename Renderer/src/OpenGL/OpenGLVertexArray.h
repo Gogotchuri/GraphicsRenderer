@@ -8,7 +8,7 @@
 #ifndef OPENGL_OPENGLVERTEXARRAY_H_
 #define OPENGL_OPENGLVERTEXARRAY_H_
 
-#include <glad\glad.h>
+#include <glad/glad.h>
 #include "VertexArray.h"
 
 class OpenGLVertexArray : public VertexArray{

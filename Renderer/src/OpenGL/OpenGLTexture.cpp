@@ -1,6 +1,6 @@
 #include "OpenGLTexture.h"
-#include <glad\glad.h>
-#include "vendor\stb_image\stb_image.h"
+#include <glad/glad.h>
+#include "vendor/stb_image/stb_image.h"
 
 
 OpenGLTexture::OpenGLTexture(const std::string& filepath)

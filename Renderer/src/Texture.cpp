@@ -1,6 +1,6 @@
 #include "Texture.h"
 #include "RendererAPI.h"
-#include "OpenGL\OpenGLTexture.h"
+#include "OpenGL/OpenGLTexture.h"
 
 std::shared_ptr<Texture> Texture::create(const std::string& filepath) {
 	switch (RendererAPI::getAPI()) {
