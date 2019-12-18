@@ -2,6 +2,7 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "RendererAPI.h"
+#include "Camera.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -18,6 +19,7 @@ void mvpPractice(GLFWwindow * window);
 void transformationsBasics(GLFWwindow * window);
 void helloTriangleAgain(GLFWwindow * window);
 void helloSquare(GLFWwindow * window);
+void bunchOfCubes(GLFWwindow * window);
 
 int main(void)
 {
@@ -57,14 +59,21 @@ void helloSquare(GLFWwindow * window) {
 
 	va->unbind();
 
+	glm::mat4 model(1.0f);
+	glm::mat4 view(1.0f);
+
+	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)700 / (float)450, 0.1f, 100.0f);
+
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0);
+
 	float slide = 0;
 	float change = 0.01;
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
-		if(slide > 1) change = -0.01;
-		if(slide < -1) change = 0.01;
+		if(slide > 1) change = -0.005;
+		if(slide < -1) change = 0.005;
 		slide += change;
 		// input
 		// -----
@@ -73,8 +82,18 @@ void helloSquare(GLFWwindow * window) {
 		// render
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
-		shader->setUniform("slide", ShaderDataType::Float1, &slide);
+		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
+		// float radius = 3.0f;
+        // float camX   = sin(glfwGetTime()) * radius;
+        // float camZ   = cos(glfwGetTime()) * radius;
+        // view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
+		std::cout << (float)180*slide << "degrees" << std::endl;
+		camera.setYaw((float)180*slide);
+		glm::mat4 view_proj = camera.getViewProjectionMatrix();
+		shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+		model = glm::translate(model, glm::vec3(0, 0, 0));
+
+		shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
 		// draw our first triangle
 		shader->bind();
 		va->bind();
@@ -223,6 +242,106 @@ void texturedSquare(GLFWwindow * window) {
 void closeOnEnter(GLFWwindow * window) {
 	if (glfwGetKey(window, GLFW_KEY_ENTER) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
+}
+
+void bunchOfCubes(GLFWwindow * window) {
+	float vertices[] = {
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	glm::vec3 cubePositions[] = {
+		glm::vec3(0.0f,  0.0f,  0.0f),
+		glm::vec3(2.0f,  5.0f, -5.0f),
+		glm::vec3(-1.5f, -2.2f, -2.5f),
+		glm::vec3(-3.8f, -2.0f, -7.3f),
+		glm::vec3(2.4f, -0.4f, -3.5f),
+		glm::vec3(-1.7f,  3.0f, -7.5f),
+		glm::vec3(1.3f, -2.0f, -2.5f),
+		glm::vec3(1.5f,  2.0f, -2.5f),
+		glm::vec3(1.5f,  0.2f, -1.5f),
+		glm::vec3(-1.3f,  1.0f, -1.5f)
+	};
+
+	std::shared_ptr<VertexArray> va = VertexArray::create();
+	std::shared_ptr<VertexBuffer> vb = VertexBuffer::create(vertices, sizeof(float), 30*6);
+	VertexBufferLayout layout;
+	layout.push(LayoutElement(ShaderDataType::Float3, "position_coords"));
+	layout.push(LayoutElement(ShaderDataType::Float2, "texture_sampling"));
+	vb->setLayout(layout);
+
+	std::shared_ptr<Shader> shader = Shader::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/MvpPractice.shader");
+	std::shared_ptr<Texture> giraffe_textue = Texture::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/textures/Giraffe.jpg");
+	giraffe_textue->bind();
+	int loc = 0;
+	shader->setUniform("u_texture", ShaderDataType::Int1, &loc);
+
+	glm::mat4 trans = glm::mat4(1.0f);
+	trans = glm::rotate(trans, glm::radians(0.0f), glm::vec3(0.0, 0.0, 1.0));
+	trans = glm::scale(trans, glm::vec3(0.1, 0.1, 0.1));
+
+	glm::mat4 identity = glm::mat4(1.0f);
+
+	/* Loop until the user closes the window */
+	while (!glfwWindowShouldClose(window))
+	{
+		closeOnEnter(window);
+		/*Clear screen*/
+		Renderer::clearColor(1.0f, 0.3f, 0.3f, 1.0f);
+		//Draw Triangle
+		shader->setUniform("proj", ShaderDataType::Mat4, glm::value_ptr(identity));
+		shader->setUniform("view", ShaderDataType::Mat4, glm::value_ptr(identity));
+		shader->setUniform("model", ShaderDataType::Mat4, glm::value_ptr(identity));
+
+		shader->bind();
+		va->bind();
+
+		glDrawArrays(GL_TRIANGLES, 0, 36);
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
 }
 
 #if 0
