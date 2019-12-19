@@ -1,24 +1,22 @@
 #include "Camera.h"
 #include <glm/gtc/matrix_transform.hpp>
+#include <iostream>
 
-Camera::Camera(const glm::vec3& position, const glm::vec3& world_up, float roll_degree)
-	:cam_position(position), cam_up(world_up), world_up(world_up),
-		cam_yaw(-90.0f), cam_pitch(0.0f), cam_roll(roll_degree)
+Camera::Camera(const glm::vec3 position, const glm::vec3 up, float roll, float yaw, float pitch)
+	:cam_position(position), cam_up(up), cam_direction(glm::vec3(0.0f, 0.0f, -1.0f)),
+	 world_up(up), cam_yaw(yaw), cam_pitch(pitch), cam_roll(roll)
 {
     updateProjectionMatrix();
 	updateVectors();
 }
 
-void Camera::setPosition(const glm::vec3 & position)
+void Camera::setPosition(const glm::vec3 position)
 {
 	cam_position = position;
 	updateVectors();
 }
 
-const glm::vec3& Camera::getPosition() const
-{
-	return cam_position;
-}
+const glm::vec3& Camera::getPosition() const { return cam_position; }
 
 void Camera::setPerspective(const float fov, const float aspect_ratio, const float near_sight, const float far_sight)
 {
@@ -29,21 +27,11 @@ void Camera::setPerspective(const float fov, const float aspect_ratio, const flo
 	updateProjectionMatrix();
 }
 
-const glm::mat4& Camera::getViewMatrix() const
-{
-	return view_matrix;
-}
+const glm::mat4& Camera::getViewMatrix() const { return view_matrix; }
 
-const glm::mat4& Camera::getProjectionMatrix() const
-{
-	return projection_matrix;
-}
+const glm::mat4& Camera::getProjectionMatrix() const { return projection_matrix; }
 
-const glm::mat4& Camera::getViewProjectionMatrix() const
-{
-	return view_projection_matrix;
-}
-
+const glm::mat4& Camera::getViewProjectionMatrix() const { return view_projection_matrix; }
 
 void Camera::setRoll(float roll_degree)
 {
@@ -51,11 +39,7 @@ void Camera::setRoll(float roll_degree)
 	updateVectors();
 }
 
-float Camera::getRoll() const
-{
-	return cam_roll;
-}
-
+float Camera::getRoll() const { return cam_roll; }
 
 void Camera::setPitch(float pitch_degree)
 {
@@ -63,10 +47,7 @@ void Camera::setPitch(float pitch_degree)
 	updateVectors();
 }
 
-float Camera::getPitch() const
-{
-	return cam_pitch;
-}
+float Camera::getPitch() const { return cam_pitch; }
 
 void Camera::setYaw(float yaw_degree)
 {
@@ -74,31 +55,40 @@ void Camera::setYaw(float yaw_degree)
 	updateVectors();
 }
 
-float Camera::getYaw() const
-{
-	return cam_yaw;
+float Camera::getYaw() const { return cam_yaw; }
+
+void Camera::setFixedTarget(const glm::vec3 target) {
+	has_fixed_target = true;
+	fixed_target = target;
 }
 
+void Camera::removeFixedTarget() { has_fixed_target = false; }
+
+bool Camera::hasFixedTarget() const { return has_fixed_target;}
+
 //++++++++++++++++++++++++++++++++++++++Privates+++++++++++++++++++++++++++++++++++
+
+static void printVec3(const glm::vec3 & vec, std::string name = "vec"){
+	std::cout << "Vector name: " + name <<std::endl;
+	std::cout << vec.x << " X; " << vec.y << " Y " << vec.z << " Z " <<std::endl;
+}
 
 void Camera::updateVectors()
 {
 	glm::vec3 front;
 	front.x = cos(glm::radians(cam_yaw)) * cos(glm::radians(cam_pitch));
 	front.y = sin(glm::radians(cam_pitch));
-	front.z = cos(glm::radians(cam_yaw)) * cos(glm::radians(cam_pitch));
+	front.z = sin(glm::radians(cam_yaw)) * cos(glm::radians(cam_pitch));
 	cam_direction = glm::normalize(front);
-
-	cam_direction = glm::normalize(cam_direction);
-	cam_right = glm::normalize(glm::cross(cam_direction, world_up));
+	cam_right = glm::normalize(glm::cross(cam_direction, world_up));  // Normalize the vectors, because their length gets closer to 0 the more you look up or down which results in slower movement.
 	cam_up = glm::normalize(glm::cross(cam_right, cam_direction));
-
 	updateViewMatrix();
 }
 
 void Camera::updateViewMatrix()
 {
-	view_matrix = glm::lookAt(cam_position, cam_position + cam_direction, cam_up);
+	glm::vec3 target = has_fixed_target ? fixed_target : (cam_position + cam_direction);
+	view_matrix = glm::lookAt(cam_position, target, cam_up);
 	view_projection_matrix = projection_matrix * view_matrix;
 }
 

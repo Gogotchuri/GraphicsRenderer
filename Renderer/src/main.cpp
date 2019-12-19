@@ -59,13 +59,8 @@ void helloSquare(GLFWwindow * window) {
 
 	va->unbind();
 
-	glm::mat4 model(1.0f);
-	glm::mat4 view(1.0f);
-
-	glm::mat4 projection = glm::perspective(glm::radians(45.0f), (float)700 / (float)450, 0.1f, 100.0f);
-
-	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f), glm::vec3(0.0f, 1.0f, 0.0f), 0);
-
+	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
+	camera.setFixedTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	float slide = 0;
 	float change = 0.01;
 	// render loop
@@ -83,14 +78,14 @@ void helloSquare(GLFWwindow * window) {
 		// ------
 		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		// float radius = 3.0f;
-        // float camX   = sin(glfwGetTime()) * radius;
-        // float camZ   = cos(glfwGetTime()) * radius;
-        // view = glm::lookAt(glm::vec3(camX, 0.0f, camZ), glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3(0.0f, 1.0f, 0.0f));
-		std::cout << (float)180*slide << "degrees" << std::endl;
-		camera.setYaw((float)180*slide);
-		glm::mat4 view_proj = camera.getViewProjectionMatrix();
+		float radius = 3.0f;
+        float camX   = sin(glfwGetTime()) * radius;
+        float camZ   = cos(glfwGetTime()) * radius;
+		camera.setPosition(glm::vec3(camX, 0, camZ));
+        glm::mat4 view_proj = camera.getViewProjectionMatrix();
 		shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+
+		glm::mat4 model(1.0f);
 		model = glm::translate(model, glm::vec3(0, 0, 0));
 
 		shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
