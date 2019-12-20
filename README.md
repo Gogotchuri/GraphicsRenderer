@@ -24,4 +24,4 @@ which is included in ${root}/vendor/premake as windows binary; Script is in the 
   - *Generate gmake project*
   - $ *make*
 
-** Project Started as an private project so most of earlier commits aren't present here
+** Project Started as a private project so most of earlier commits aren't present here
