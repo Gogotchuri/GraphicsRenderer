@@ -11,6 +11,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include <slogger/slogger.h>
 
 using namespace std;
 
@@ -58,6 +59,7 @@ void helloSquare(GLFWwindow * window) {
 
 	va->unbind();
 
+	SLOGGER_INIT_FILE("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/log.txt");
 	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 	camera.setFixedTarget(glm::vec3(0.0f, 0.0f, 0.0f));
 	float slide = 0;
@@ -66,8 +68,14 @@ void helloSquare(GLFWwindow * window) {
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
-		if(slide > 1) change = -0.005;
-		if(slide < -1) change = 0.005;
+		if(slide > 1){
+			SLOGGER_INFO(std::string("Decreasing slide!"));
+			change = -0.005;
+		}
+		if(slide < -1) {
+			SLOGGER_ERROR(std::string("Increasing slide!"));
+			change = 0.005;
+		}
 		slide += change;
 		// input
 		// -----
@@ -98,7 +106,7 @@ void helloSquare(GLFWwindow * window) {
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-
+	SLOGGER_CLOSE();
 	glfwTerminate();
 }
 
