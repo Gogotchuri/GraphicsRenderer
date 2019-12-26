@@ -7,7 +7,9 @@
 #include "Renderer.h"
 #include "Texture.h"
 #include "RendererAPI.h"
+#include "RenderCommand.h"
 #include "Camera.h"
+#include "Renderer2D.h"
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
@@ -23,6 +25,7 @@ void bunchOfCubes(GLFWwindow * window);
 
 int main(void)
 {
+	srand(time(nullptr));
 	GLFWwindow* window = Renderer::initWindow(700, 450, "GLFW Window");
 	helloSquare(window);
 	return 0;
@@ -30,83 +33,31 @@ int main(void)
 
 void helloSquare(GLFWwindow * window) {
 
-	std::shared_ptr<Shader> shader = Shader::create(
-		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/HelloTriangleAgain.glsl"));
-
-	// set up vertex data (and buffer(s)) and configure vertex attributes
-	// ------------------------------------------------------------------
-	float vertices[] = {
-		0.5f,  0.5f, 0.0f,  // top right
-		0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
-	};
-
-	uint32_t indices[] = {
-		0, 1, 3,
-		1, 2, 3
-	};
-
-	shared_ptr<VertexBuffer> vb = VertexBuffer::create(vertices, sizeof(float), 12);
-	VertexBufferLayout layout;
-	layout.push(LayoutElement(ShaderDataType::Float3, "Vertex_coords"));
-	vb->setLayout(layout);
-	shared_ptr<IndexBuffer> ib = IndexBuffer::create(indices, 6);
-
-	shared_ptr<VertexArray> va = VertexArray::create();
-	va->addVertexBuffer(vb);
-	va->setIndexBuffer(ib);
-
-	va->unbind();
-
-	SLOGGER_INIT_FILE("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/log.txt");
-	Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-	camera.setFixedTarget(glm::vec3(0.0f, 0.0f, 0.0f));
-	float slide = 0;
-	float change = 0.01;
+	Renderer2D::init();
+	OrthographicCamera camera(0.0f, 700.0f, 0.0f, 450.0f);
 	// render loop
 	// -----------
 	while (!glfwWindowShouldClose(window))
 	{
-		if(slide > 1){
-			SLOGGER_INFO(std::string("Decreasing slide!"));
-			change = -0.005;
-		}
-		if(slide < -1) {
-			SLOGGER_ERROR(std::string("Increasing slide!"));
-			change = 0.005;
-		}
-		slide += change;
 		// input
 		// -----
 		closeOnEnter(window);
-
 		// render
 		// ------
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT);
-		float radius = 3.0f;
-        float camX   = sin(glfwGetTime()) * radius;
-        float camZ   = cos(glfwGetTime()) * radius;
-		camera.setPosition(glm::vec3(camX, 0, camZ));
-        glm::mat4 view_proj = camera.getViewProjectionMatrix();
-		shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
-
-		glm::mat4 model(1.0f);
-		model = glm::translate(model, glm::vec3(0, 0, 0));
-
-		shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
-		// draw our first triangle
-		shader->bind();
-		va->bind();
-		glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
-
+		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		RenderCommand::clear();
+		Renderer2D::startScene(camera);
+		for(int x = 10; x < 700; x += 10)
+			for(int y = 10; y < 450; y += 10)
+				Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(9, 9),
+					glm::vec3((float)(rand() % 10)/10.0f, (float)(rand() % 10)/10.0f, (float)(rand() % 10)/10.0f)
+				);
+		Renderer2D::endScene();
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
 		glfwSwapBuffers(window);
 		glfwPollEvents();
 	}
-	SLOGGER_CLOSE();
 	glfwTerminate();
 }
 

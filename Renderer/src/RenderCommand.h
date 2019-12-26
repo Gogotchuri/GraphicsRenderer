@@ -12,23 +12,25 @@
 #include "RendererAPI.h"
 
 class RenderCommand {
-	inline static void init() {
+public:
+	static void init() {
 		renderer_API->init();
 	}
 
-	inline static void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
+	static void setViewport(uint32_t x, uint32_t y, uint32_t width, uint32_t height) {
 		renderer_API->setViewport(x, y, width, height);
 	}
 
-	inline static void setClearColor(float r, float g, float b, float a) {
+	static void setClearColor(float r, float g, float b, float a) {
 		renderer_API->setClearColor(r, g, b, a);
 	}
 
-	inline static void clear() {
+	static void clear() {
 		renderer_API->clear();
 	}
 
-	inline static void drawVA(const std::shared_ptr<VertexArray>& vertexArray){
+	//TODO change name to mention elements/indexes
+	static void drawVA(const std::shared_ptr<VertexArray>& vertexArray){
 		renderer_API->drawVA(vertexArray);
 	}
 

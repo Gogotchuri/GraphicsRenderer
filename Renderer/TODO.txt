@@ -3,4 +3,4 @@
 3) Implemenent Graphics context
 4) Create namespaces and compile project as Library
 5) Create detailed Documentation of API and inner classes
-6) Create logging and assertion system
+6) Create assertion system

@@ -2,6 +2,10 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <iostream>
 
+///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+///++++++++++++++++++++++++++++++++ Perspective Camera ++++++++++++++++++++++++++++++++++++++++++
+///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
 Camera::Camera(const glm::vec3 position, const glm::vec3 up, float roll, float yaw, float pitch)
 	:cam_position(position), cam_up(up), cam_direction(glm::vec3(0.0f, 0.0f, -1.0f)),
 	 world_up(up), cam_yaw(yaw), cam_pitch(pitch), cam_roll(roll)
@@ -95,5 +99,44 @@ void Camera::updateViewMatrix()
 void Camera::updateProjectionMatrix()
 {
 	projection_matrix = glm::perspective(glm::radians(persp_fov), persp_aspect_ratio, persp_near_plane, persp_far_plane);
+	view_projection_matrix = projection_matrix * view_matrix;
+}
+
+
+
+///++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+///++++++++++++++++++++++++++++++++ Orthographic Camera ++++++++++++++++++++++++++++++++++++++++++
+///+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+OrthographicCamera::OrthographicCamera(float left, float right, float bottom, float top, float near_plane, float far_plane)
+	: view_matrix(glm::mat4(1.0f)), projection_matrix(glm::ortho(left, right, bottom, top, near_plane, far_plane))
+{
+	view_projection_matrix = projection_matrix * view_matrix;
+}
+
+OrthographicCamera::~OrthographicCamera() {}
+
+void OrthographicCamera::setPosition(const glm::vec3 position) {
+	cam_position = position;
+	updateViewMatrix();
+}
+
+void OrthographicCamera::setRoll(float roll_degree) {
+	cam_roll = roll_degree;
+	updateViewMatrix();
+}
+
+void OrthographicCamera::setFrustum(float left, float right, float bottom, float top, float near_plane, float far_plane) {
+	projection_matrix = glm::ortho(left, right, bottom, top, near_plane, far_plane);
+	view_projection_matrix = projection_matrix * view_matrix;
+}
+//+++++++++++++++++++++++++++++++++ Privates +++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+void OrthographicCamera::updateViewMatrix(){
+	glm::mat4 IMat = glm::mat4(1.0f); //Identity matrix
+	glm::vec3 ZAxis = glm::vec3(0, 0, 1);
+	view_matrix = glm::inverse(
+		glm::translate(IMat, cam_position) * glm::rotate(IMat, glm::radians(cam_roll), ZAxis)
+	);
 	view_projection_matrix = projection_matrix * view_matrix;
 }

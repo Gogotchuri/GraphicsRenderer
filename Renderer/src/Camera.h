@@ -1,5 +1,5 @@
 #ifndef SRC_CAMERA_H_
-#define SRC_CAMERA_H
+#define SRC_CAMERA_H_
 #include <glm/glm.hpp>
 
 class Camera{
@@ -56,6 +56,35 @@ private:
 
 	glm::vec3 fixed_target = glm::vec3(0.0f, 0.0f, 0.0f);
 	bool has_fixed_target = false;
+};
+
+class OrthographicCamera{
+public:
+    OrthographicCamera(float left, float right, float bottom, float top, float near_plane = -1.0, float far_plane = 1.0);
+	~OrthographicCamera();
+
+	void setPosition(const glm::vec3 position);
+	const glm::vec3& getPosition() const { return cam_position; };
+
+	void setRoll(float roll_degree);
+	float getRoll() const { return cam_roll; };
+
+	void setFrustum(float left, float right, float bottom, float top, float near_plane = -1.0, float far_plane = 1.0);
+
+	const glm::mat4& getViewMatrix() const { return view_matrix; };
+	const glm::mat4& getProjectionMatrix() const { return projection_matrix; };
+	const glm::mat4& getViewProjectionMatrix() const { return view_projection_matrix; };
+
+private:
+	void updateViewMatrix();
+
+private:
+	glm::vec3 cam_position = glm::vec3(0.0f, 0.0f, 0.0f);
+	float cam_roll = 0.0f;
+
+	glm::mat4 view_matrix;
+	glm::mat4 projection_matrix;
+	glm::mat4 view_projection_matrix;
 };
 
 #endif

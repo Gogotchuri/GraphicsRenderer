@@ -30,25 +30,25 @@ void OpenGLShader::setUniform(std::string name, ShaderDataType type, const void 
 			glUniform1fv(uniform_loc, 1, (float *) data);
 			break;
 		case ShaderDataType::Float2:
-			glUniform2fv(uniform_loc, 2, (float *) data);
+			glUniform2fv(uniform_loc, 1, (float *) data);
 			break;
 		case ShaderDataType::Float3:
-			glUniform3fv(uniform_loc, 3, (float *) data);
+			glUniform3fv(uniform_loc, 1, (float *) data);
 			break;
 		case ShaderDataType::Float4:
-			glUniform4fv(uniform_loc, 4, (float *) data);
+			glUniform4fv(uniform_loc, 1, (float *) data);
 			break;
 		case ShaderDataType::Int1:
 			glUniform1iv(uniform_loc, 1, (int *) data);
 			break;
 		case ShaderDataType::Int2:
-			glUniform2iv(uniform_loc, 2, (int *) data);
+			glUniform2iv(uniform_loc, 1, (int *) data);
 			break;
 		case ShaderDataType::Int3:
-			glUniform3iv(uniform_loc, 3, (int *) data);
+			glUniform3iv(uniform_loc, 1, (int *) data);
 			break;
 		case ShaderDataType::Int4:
-			glUniform4iv(uniform_loc, 4, (int *) data);
+			glUniform4iv(uniform_loc, 1, (int *) data);
 			break;
 		case ShaderDataType::Mat2:
 			glUniformMatrix2fv(uniform_loc, 1, GL_FALSE, (float *) data);
