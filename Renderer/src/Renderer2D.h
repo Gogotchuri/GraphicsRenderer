@@ -35,7 +35,7 @@ public:
 private:
 
     static std::shared_ptr<VertexArray> va;
-    static std::shared_ptr<Shader> shader;
+    static std::shared_ptr<Shader> color_shader, texture_shader;
 };
 
 #endif /* RENDERER2D_H_ */

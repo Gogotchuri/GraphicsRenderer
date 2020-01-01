@@ -11,12 +11,16 @@
 #include <glm/gtc/type_ptr.hpp>
 
 std::shared_ptr<VertexArray> Renderer2D::va = nullptr;
-std::shared_ptr<Shader> Renderer2D::shader = nullptr;
+std::shared_ptr<Shader> Renderer2D::color_shader = nullptr;
+std::shared_ptr<Shader> Renderer2D::texture_shader = nullptr;
 
 void Renderer2D::init(){
-    shader = Shader::create(
-		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/HelloTriangleAgain.glsl"));
-
+    color_shader = Shader::create(
+		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/coloredFigure.glsl")
+	);
+	texture_shader = Shader::create(
+		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/texturedFigure.glsl")
+	);
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	float vertices[] = {
@@ -47,15 +51,23 @@ void Renderer2D::init(){
 }
 
 void Renderer2D::startScene(const OrthographicCamera& camera){
-	shader->bind();
 	glm::mat4 view_proj = camera.getViewProjectionMatrix();
-	shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+
+	color_shader->bind();
+	color_shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+
+	texture_shader->bind();
+	texture_shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
 }
 
 void Renderer2D::startScene(const Camera& camera){
-	shader->bind();
 	glm::mat4 view_proj = camera.getViewProjectionMatrix();
-	shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+
+	color_shader->bind();
+	color_shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
+
+	texture_shader->bind();
+	texture_shader->setUniform("u_view_projection", ShaderDataType::Mat4, glm::value_ptr(view_proj));
 }
 
 void Renderer2D::endScene(){}
@@ -67,16 +79,27 @@ void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size){
 }
 
 void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color){
+	color_shader->bind();
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
-	shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
-	shader->setUniform("u_color", ShaderDataType::Float3, glm::value_ptr(color));
+	color_shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
+	color_shader->setUniform("u_color", ShaderDataType::Float3, glm::value_ptr(color));
 	RenderCommand::drawVA(va);
 }
 
 void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture> texture){
+	texture_shader->bind();
+	glm::mat4 model = glm::mat4(1.0f);
+	model = glm::translate(model, position);
+	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
+	texture_shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
 
+	int tex_id = 0;
+	texture->bind();
+	texture_shader->setUniform("u_texture", ShaderDataType::Int1, &tex_id);
+
+	RenderCommand::drawVA(va);
 }
 
 void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size){
@@ -88,6 +111,6 @@ void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size, cons
 }
 
 void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture> texture){
-
+	drawRect(glm::vec3(position.x, position.y, 0.0f), size, texture);
 }
 
