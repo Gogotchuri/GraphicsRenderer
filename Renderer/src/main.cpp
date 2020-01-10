@@ -18,6 +18,7 @@
 
 using namespace std;
 
+void texturedSquare(std::shared_ptr<Window> window);
 void closeOnEnter(GLFWwindow * window);
 void closeOnEnter(std::shared_ptr<Window> window);
 void twoTriangles(GLFWwindow * window);
@@ -29,6 +30,7 @@ int main(void)
 {
 	srand(time(nullptr));
 	std::shared_ptr<Window> window = Window::create(800, 600, "New Window");
+	// texturedSquare(window);
 	helloSquare(window);
 	return 0;
 }
@@ -49,9 +51,10 @@ void helloSquare(std::shared_ptr<Window> window) {
 		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		RenderCommand::clear();
 		Renderer2D::startScene(camera);
-		for(int x = 10; x < 700; x += 10)
-			for(int y = 10; y < 450; y += 10)
-				Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(9, 9), glm::vec3(1.0f, 0.5f, 0.0f));
+		// for(int x = 10; x < 700; x += 10)
+		// 	for(int y = 10; y < 450; y += 10)
+		// 		Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(9, 9), giraffe_tex);
+		Renderer2D::drawRect(glm::vec2(20, 20), glm::vec2(15, 15), giraffe_tex);
 		Renderer2D::endScene();
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
@@ -61,7 +64,7 @@ void helloSquare(std::shared_ptr<Window> window) {
 	glfwTerminate();
 }
 
-void texturedSquare(GLFWwindow * window) {
+void texturedSquare(std::shared_ptr<Window> window) {
 	//Triangle vertices to draw
 	float vertices[] =
 	{
@@ -89,9 +92,9 @@ void texturedSquare(GLFWwindow * window) {
 	va->addVertexBuffer(vb);
 	va->setIndexBuffer(ib);
 
-	std::shared_ptr<Shader> shader = Shader::create(std::string("res/shaders/TexturedSquare.shader"));
+	std::shared_ptr<Shader> shader = Shader::create(std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/TexturedSquare.shader"));
 
-	std::shared_ptr<Texture> tex = Texture::create("res/textures/21122475_1493887597347506_3596902192094063919_o.jpg");
+	std::shared_ptr<Texture> tex = Texture::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/textures/Giraffe.jpg");
 	tex->bind();
 	int loc = 0;
 	shader->setUniform("u_texture", ShaderDataType::Int1, &loc);
@@ -102,7 +105,7 @@ void texturedSquare(GLFWwindow * window) {
 
 
 	/* Loop until the user closes the window */
-	while (!glfwWindowShouldClose(window))
+	while (window->isOpen())
 	{
 		closeOnEnter(window);
 		/*Clear screen*/
@@ -115,7 +118,7 @@ void texturedSquare(GLFWwindow * window) {
 		else
 			trans = glm::scale(trans, glm::vec3(0.5, 0.5, 0.5));
 		/* Swap front and back buffers */
-		glfwSwapBuffers(window);
+		window->swapBuffers();
 
 		/* Poll for and process events */
 		glfwPollEvents();

@@ -62,7 +62,6 @@ void Renderer::draw(const std::shared_ptr<VertexArray>& vao, const std::shared_p
 
 	//Bind vertex array (configuration of vertex buffer)
 	vao->bind();
-	ibo->bind();
 	//Draw bound array
 	glDrawElements(GL_TRIANGLES, ibo->getCount(), GL_UNSIGNED_INT, 0);
 }

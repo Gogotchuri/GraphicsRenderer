@@ -24,10 +24,10 @@ void Renderer2D::init(){
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
 	float vertices[] = {
-		0.5f,  0.5f, 0.0f,  // top right
-		0.5f, -0.5f, 0.0f,  // bottom right
-		-0.5f, -0.5f, 0.0f,  // bottom left
-		-0.5f,  0.5f, 0.0f   // top left 
+		 0.5f,  0.5f, 0.0f,  1.0f, 1.0f,// top right
+		 0.5f, -0.5f, 0.0f,  1.0f, 0.0f,// bottom right
+		-0.5f, -0.5f, 0.0f,  0.0f, 0.0f,// bottom left
+		-0.5f,  0.5f, 0.0f,  0.0f, 1.0f// top left 
 	};
 
 	uint32_t indices[] = {
@@ -35,9 +35,10 @@ void Renderer2D::init(){
 		1, 2, 3
 	};
 
-	std::shared_ptr<VertexBuffer> vb = VertexBuffer::create(vertices, sizeof(float), 12);
+	std::shared_ptr<VertexBuffer> vb = VertexBuffer::create(vertices, sizeof(float), 20);
 	VertexBufferLayout layout;
 	layout.push(LayoutElement(ShaderDataType::Float3, "Vertex_coords"));
+	layout.push(LayoutElement(ShaderDataType::Float2, "Texture_coords"));
 	vb->setLayout(layout);
 	std::shared_ptr<IndexBuffer> ib = IndexBuffer::create(indices, 6);
 
@@ -95,9 +96,9 @@ void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, cons
 	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
 	texture_shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
 
-	int tex_id = 0;
-	texture->bind();
-	texture_shader->setUniform("u_texture", ShaderDataType::Int1, &tex_id);
+	int slot_id = 0;
+	texture->bind(slot_id);
+	texture_shader->setUniform("u_texture", ShaderDataType::Int1, &slot_id);
 
 	RenderCommand::drawVA(va);
 }
