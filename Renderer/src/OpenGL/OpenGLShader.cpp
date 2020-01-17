@@ -11,13 +11,13 @@
 #include <iostream>
 
 OpenGLShader::OpenGLShader(std::string& name, std::string& vertex_src, std::string& fragment_src)
-	:name(name)
+	:name(name), gl_program_id(0)
 {
 	createProgram(vertex_src, fragment_src);
 }
 
 OpenGLShader::OpenGLShader(std::string& filepath)
-	:name(filepath)
+	:name(filepath), gl_program_id(0)
 {
 	ShaderSrc src = parseShaders(filepath);
 	createProgram(src.vertex_src, src.fragment_src);
@@ -66,8 +66,7 @@ void OpenGLShader::setUniform(std::string name, ShaderDataType type, const void 
 }
 
 void OpenGLShader::bind() const {
-	glUseProgram(1);
-
+	glUseProgram(gl_program_id);
 }
 
 void OpenGLShader::unbind() const {

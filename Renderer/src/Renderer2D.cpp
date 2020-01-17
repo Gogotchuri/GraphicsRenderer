@@ -5,6 +5,9 @@
  *      Author: gogotchuri
  */
 
+#define RENDER_PLATFORM_WINDOWS_
+
+
 #include "Renderer2D.h"
 
 #include <glm/gtc/matrix_transform.hpp>
@@ -15,11 +18,18 @@ std::shared_ptr<Shader> Renderer2D::color_shader = nullptr;
 std::shared_ptr<Shader> Renderer2D::texture_shader = nullptr;
 
 void Renderer2D::init(){
+#ifdef RENDER_PLATFORM_WINDOWS_
+	std::string path_to_shaders = "res/shaders/";
+#elif RENDER_PLATFORM_LINUX_
+	std::string path_to_shaders = "/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/";
+#endif
+
     color_shader = Shader::create(
-		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/coloredFigure.glsl")
+		path_to_shaders + "coloredFigure.glsl"
 	);
+
 	texture_shader = Shader::create(
-		std::string("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/texturedFigure.glsl")
+		path_to_shaders + "texturedFigure.glsl"
 	);
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------

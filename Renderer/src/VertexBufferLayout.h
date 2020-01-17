@@ -9,6 +9,7 @@
 #define VERTEXBUFFERLAYOUT_H_
 
 #include <vector>
+#include <string>
 
 enum class ShaderDataType{
 	None = 0, Float1, Float2, Float3, Float4, Int1, Int2, Int3, Int4, Mat2, Mat3, Mat4

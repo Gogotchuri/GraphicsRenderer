@@ -1,7 +1,8 @@
 #include "OpenGLTexture.h"
 #include <glad/glad.h>
 #include "vendor/stb_image/stb_image.h"
-
+#include <assert.h>
+#include <slogger/slogger.h>
 
 OpenGLTexture::OpenGLTexture(const std::string& filepath)
 	:gl_texture_id(0), filepath(filepath), height(0), width(0), bpp(0)
@@ -9,6 +10,10 @@ OpenGLTexture::OpenGLTexture(const std::string& filepath)
 	unsigned char * local_buffer;
 	stbi_set_flip_vertically_on_load(1);
 	local_buffer = stbi_load(filepath.c_str(), &width, &height, &bpp, 4);
+	if (!local_buffer) {
+		SLOGGER_ERROR("Texture isn't on the filepath: " + filepath);
+		assert(false);
+	}
 
 	glGenTextures(1, &gl_texture_id);
 	bind();

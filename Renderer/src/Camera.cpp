@@ -8,9 +8,10 @@
 
 Camera::Camera(const glm::vec3 position, const glm::vec3 up, float roll, float yaw, float pitch)
 	:cam_position(position), cam_up(up), cam_direction(glm::vec3(0.0f, 0.0f, -1.0f)),
-	 world_up(up), cam_yaw(yaw), cam_pitch(pitch), cam_roll(roll)
+	world_up(up), cam_yaw(yaw), cam_pitch(pitch), cam_roll(roll), 
+	projection_matrix(glm::mat4(1.0f)), view_matrix(glm::mat4(1.0f)), view_projection_matrix(glm::mat4(1.0f))
 {
-    updateProjectionMatrix();
+	updateProjectionMatrix();
 	updateVectors();
 }
 
@@ -68,13 +69,13 @@ void Camera::setFixedTarget(const glm::vec3 target) {
 
 void Camera::removeFixedTarget() { has_fixed_target = false; }
 
-bool Camera::hasFixedTarget() const { return has_fixed_target;}
+bool Camera::hasFixedTarget() const { return has_fixed_target; }
 
 //++++++++++++++++++++++++++++++++++++++Privates+++++++++++++++++++++++++++++++++++
 
-static void printVec3(const glm::vec3 & vec, std::string name = "vec"){
-	std::cout << "Vector name: " + name <<std::endl;
-	std::cout << vec.x << " X; " << vec.y << " Y " << vec.z << " Z " <<std::endl;
+static void printVec3(const glm::vec3& vec, std::string name = "vec") {
+	//std::cout << "Vector name: " << name << std::endl;
+	std::cout << vec.x << " X; " << vec.y << " Y " << vec.z << " Z " << std::endl;
 }
 
 void Camera::updateVectors()
@@ -132,7 +133,7 @@ void OrthographicCamera::setFrustum(float left, float right, float bottom, float
 }
 //+++++++++++++++++++++++++++++++++ Privates +++++++++++++++++++++++++++++++++++++++++++++++++++++
 
-void OrthographicCamera::updateViewMatrix(){
+void OrthographicCamera::updateViewMatrix() {
 	glm::mat4 IMat = glm::mat4(1.0f); //Identity matrix
 	glm::vec3 ZAxis = glm::vec3(0, 0, 1);
 	view_matrix = glm::inverse(

@@ -2,6 +2,7 @@
 #define _OPEN_GL_GL_WINDOW_
 
 #include <Window.h>
+#include <slogger/slogger.h>
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 

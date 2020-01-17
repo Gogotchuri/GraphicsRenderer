@@ -14,14 +14,14 @@
 
 #define SLOGGER_INFO(s)                 Slogger::print(Slogger::MessageStatus::INFO, s)
 #define SLOGGER_WARN(s)                 Slogger::print(Slogger::MessageStatus::WARN, s)
-#define SLOGGER_ERROR(s)                Slogger::print(Slogger::MessageStatus::ERROR, s)
+#define SLOGGER_ERROR(s)                Slogger::print(Slogger::MessageStatus::ERR, s)
 
 class Slogger {
 public:
     enum MessageStatus {
         INFO = 0,
         WARNING,
-        ERROR
+        ERR
     };
 
     enum LoggerMode {

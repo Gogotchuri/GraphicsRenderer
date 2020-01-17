@@ -72,7 +72,7 @@ void Slogger::print(MessageStatus ms, const std::string& message, bool color_sup
             case WARNING:
                 print_warning(message, color_suppot);
                 break;
-            case ERROR:
+            case ERR:
                 print_error(message, color_suppot);
                 break;
         }
@@ -88,7 +88,7 @@ void Slogger::print(MessageStatus ms, const std::string& message, bool color_sup
             case WARNING:
                 out_file << "WARNING: " << message << std::endl;
                 break;
-            case ERROR:
+            case ERR:
                 out_file << "ERROR: " << message << std::endl;
                 break;
         }

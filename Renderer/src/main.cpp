@@ -9,6 +9,7 @@
 #include "RendererAPI.h"
 #include "RenderCommand.h"
 #include "Camera.h"
+#include <time.h>
 #include "Window.h"
 #include "Renderer2D.h"
 #include <glm/glm.hpp>
@@ -25,18 +26,48 @@ void twoTriangles(GLFWwindow * window);
 void Square(GLFWwindow * window);
 void helloSquare(std::shared_ptr<Window> window);
 void bunchOfCubes(GLFWwindow * window);
+void newInterface(std::shared_ptr<Window> window);
 
 int main(void)
 {
 	srand(time(nullptr));
 	std::shared_ptr<Window> window = Window::create(800, 600, "New Window");
 	// texturedSquare(window);
-	helloSquare(window);
+	newInterface(window);
 	return 0;
 }
 
+void newInterface(std::shared_ptr<Window> window) {
+	std::shared_ptr<Texture> giraffe_tex = Texture::create("res/textures/Giraffe.jpg");
+	std::shared_ptr<Texture> abstr_tex = Texture::create("res/textures/abstr.png");
+	Renderer2D::init();
+	Camera camera = Camera();
+	camera.setFixedTarget(glm::vec3(0, 0, 0));
+
+	while (window->isOpen()) {
+		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
+		RenderCommand::clear();
+		Renderer2D::startScene(camera);
+		/*
+		for(int x = 0; x < 700; x += 15){
+			for (int y = 0; y < 450; y += 15) {
+				float r = (float)(rand()%100)/100.0f;
+				float g = (float)(rand() % 100) / 100.0f;
+				float b = (float)(rand() % 100) / 100.0f;
+				Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(10, 10), abstr_tex);
+			}
+		}
+		*/
+		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(1.0f, 1.0f), abstr_tex);
+		Renderer2D::endScene();
+		window->swapBuffers();
+		glfwPollEvents();
+	}
+
+}
+
 void helloSquare(std::shared_ptr<Window> window) {
-	std::shared_ptr<Texture> giraffe_tex = Texture::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/textures/Giraffe.jpg");
+	//std::shared_ptr<Texture> giraffe_tex = Texture::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/textures/Giraffe.jpg");
 	Renderer2D::init();
 	OrthographicCamera camera(0.0f, 700.0f, 0.0f, 450.0f);
 	// render loop
@@ -54,7 +85,7 @@ void helloSquare(std::shared_ptr<Window> window) {
 		// for(int x = 10; x < 700; x += 10)
 		// 	for(int y = 10; y < 450; y += 10)
 		// 		Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(9, 9), giraffe_tex);
-		Renderer2D::drawRect(glm::vec2(20, 20), glm::vec2(15, 15), giraffe_tex);
+		Renderer2D::drawRect(glm::vec2(20, 20), glm::vec2(15, 15), glm::vec3(1.0f, 0.5f, 0.5f));
 		Renderer2D::endScene();
 		// glfw: swap buffers and poll IO events (keys pressed/released, mouse moved etc.)
 		// -------------------------------------------------------------------------------
