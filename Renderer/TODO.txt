@@ -1,3 +1,8 @@
+1)abstract every glfw call into correct places
+
+1)Text rendering
+2)lighting
+
 2) Implement some sort of camera controller
 3) Implemenent Graphics context
 4) Create namespaces
