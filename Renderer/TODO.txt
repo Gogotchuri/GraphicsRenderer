@@ -1,6 +1,5 @@
-1) Need to impelement Renderer/Renderer 2D classes according to general abstraction of Renderer API
 2) Implement some sort of camera controller
 3) Implemenent Graphics context
-4) Create namespaces and compile project as Library
+4) Create namespaces
 5) Create detailed Documentation of API and inner classes
 6) Create assertion system

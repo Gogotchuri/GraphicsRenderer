@@ -28,6 +28,7 @@ void helloSquare(std::shared_ptr<Window> window);
 void bunchOfCubes(GLFWwindow * window);
 void newInterface(std::shared_ptr<Window> window);
 
+
 int main(void)
 {
 	srand(time(nullptr));
@@ -38,8 +39,8 @@ int main(void)
 }
 
 void newInterface(std::shared_ptr<Window> window) {
-	std::shared_ptr<Texture> giraffe_tex = Texture::create("res/textures/Giraffe.jpg");
-	std::shared_ptr<Texture> abstr_tex = Texture::create("res/textures/abstr.png");
+	//std::shared_ptr<Texture> giraffe_tex = Texture::create("res/textures/Giraffe.jpg");
+	//std::shared_ptr<Texture> abstr_tex = Texture::create("res/textures/abstr.png");
 	Renderer2D::init();
 	Camera camera = Camera();
 	camera.setFixedTarget(glm::vec3(0, 0, 0));
@@ -58,11 +59,12 @@ void newInterface(std::shared_ptr<Window> window) {
 			}
 		}
 		*/
-		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(1.0f, 1.0f), abstr_tex);
+		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.5f));
 		Renderer2D::endScene();
 		window->swapBuffers();
 		glfwPollEvents();
 	}
+	glfwTerminate();
 
 }
 

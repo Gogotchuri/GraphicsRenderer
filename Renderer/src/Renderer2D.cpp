@@ -5,31 +5,24 @@
  *      Author: gogotchuri
  */
 
-#define RENDER_PLATFORM_WINDOWS_
-
-
 #include "Renderer2D.h"
 
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
+#include "shaders/color_shader_src.h"
+#include "shaders/texture_shader_src.h"
 
 std::shared_ptr<VertexArray> Renderer2D::va = nullptr;
 std::shared_ptr<Shader> Renderer2D::color_shader = nullptr;
 std::shared_ptr<Shader> Renderer2D::texture_shader = nullptr;
 
 void Renderer2D::init(){
-#ifdef RENDER_PLATFORM_WINDOWS_
-	std::string path_to_shaders = "res/shaders/";
-#elif RENDER_PLATFORM_LINUX_
-	std::string path_to_shaders = "/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/";
-#endif
-
     color_shader = Shader::create(
-		path_to_shaders + "coloredFigure.glsl"
+		"ColorShader", COLOR_VERTEX_SRC, COLOR_FRAGMENT_SRC
 	);
 
 	texture_shader = Shader::create(
-		path_to_shaders + "texturedFigure.glsl"
+		"TextureShader", TEXTURE_VERTEX_SRC, TEXTURE_FRAGMENT_SRC
 	);
 	// set up vertex data (and buffer(s)) and configure vertex attributes
 	// ------------------------------------------------------------------
