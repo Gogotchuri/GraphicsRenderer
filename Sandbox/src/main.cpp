@@ -40,26 +40,27 @@ int main(void)
 
 void newInterface(std::shared_ptr<Window> window) {
 	//std::shared_ptr<Texture> giraffe_tex = Texture::create("res/textures/Giraffe.jpg");
-	//std::shared_ptr<Texture> abstr_tex = Texture::create("res/textures/abstr.png");
+	std::shared_ptr<Texture> Mario = Texture::create("res/textures/Mario.png");
 	Renderer2D::init();
 	Camera camera = Camera();
 	camera.setFixedTarget(glm::vec3(0, 0, 0));
-
+	camera.setPosition(glm::vec3(0, 5.0, 3.0));
+	float x = 0;
+	float y = 0;
 	while (window->isOpen()) {
+		// closeOnEnter(window);
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_LEFT) == GLFW_PRESS) x -= 1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_RIGHT) == GLFW_PRESS) x += 1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_UP) == GLFW_PRESS) y += 1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_DOWN) == GLFW_PRESS) y -= 1;
+
+		camera.setRoll(x);
+		camera.setPitch(y);
 		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		RenderCommand::clear();
 		Renderer2D::startScene(camera);
-		/*
-		for(int x = 0; x < 700; x += 15){
-			for (int y = 0; y < 450; y += 15) {
-				float r = (float)(rand()%100)/100.0f;
-				float g = (float)(rand() % 100) / 100.0f;
-				float b = (float)(rand() % 100) / 100.0f;
-				Renderer2D::drawRect(glm::vec2(x, y), glm::vec2(10, 10), abstr_tex);
-			}
-		}
-		*/
-		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(1.0f, 1.0f), glm::vec3(1.0f, 1.0f, 0.5f));
+		Renderer2D::drawRect(glm::vec2(-0.5, 0), glm::vec2(1.0f, 1.0f), Mario);
+		Renderer2D::drawRect(glm::vec2(0.5, 0), glm::vec2(1.0f, 1.0f), Mario);
 		Renderer2D::endScene();
 		window->swapBuffers();
 		glfwPollEvents();
@@ -155,6 +156,7 @@ void texturedSquare(std::shared_ptr<Window> window) {
 
 		/* Poll for and process events */
 		glfwPollEvents();
+		closeOnEnter(window);
 	}
 
 }
@@ -234,8 +236,8 @@ void bunchOfCubes(GLFWwindow * window) {
 	layout.push(LayoutElement(ShaderDataType::Float2, "texture_sampling"));
 	vb->setLayout(layout);
 
-	std::shared_ptr<Shader> shader = Shader::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/shaders/MvpPractice.shader");
-	std::shared_ptr<Texture> giraffe_textue = Texture::create("/home/gogotchuri/Workspace/OpenGL/GraphicsRenderer/Renderer/res/textures/Giraffe.jpg");
+	std::shared_ptr<Shader> shader = Shader::create("res/shaders/MvpPractice.shader");
+	std::shared_ptr<Texture> giraffe_textue = Texture::create("res/textures/Mario.png");
 	giraffe_textue->bind();
 	int loc = 0;
 	shader->setUniform("u_texture", ShaderDataType::Int1, &loc);
