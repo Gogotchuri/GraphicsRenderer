@@ -82,21 +82,34 @@ void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size){
 	drawRect(position, size, color);
 }
 
-void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color){
+void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color) {
+	drawRect(position, size, color, glm::vec3(1.0f, 0.0f, 0.0f), 0.0f);
+}
+
+void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color, 
+								const glm::vec3& rotation, const float rotation_angle){
 	color_shader->bind();
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
+	model = glm::rotate(model, glm::radians(rotation_angle), rotation);
 	color_shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
 	color_shader->setUniform("u_color", ShaderDataType::Float3, glm::value_ptr(color));
 	RenderCommand::drawVA(va);
 }
 
+
 void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture> texture){
+	drawRect(position, size, texture, glm::vec3(1.0f, 0.0f, 0.0f), 0.0f);
+}
+
+void Renderer2D::drawRect(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture> texture, 
+								const glm::vec3& rotation, const float rotation_angle){
 	texture_shader->bind();
 	glm::mat4 model = glm::mat4(1.0f);
 	model = glm::translate(model, position);
 	model = glm::scale(model, glm::vec3(size.x, size.y, 1.0f));
+	model = glm::rotate(model, glm::radians(rotation_angle), rotation);
 	texture_shader->setUniform("u_model", ShaderDataType::Mat4, glm::value_ptr(model));
 
 	int slot_id = 0;
@@ -118,3 +131,12 @@ void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size, cons
 	drawRect(glm::vec3(position.x, position.y, 0.0f), size, texture);
 }
 
+void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color, 
+				const glm::vec3& rotation, const float rotation_angle){
+	drawRect(glm::vec3(position.x, position.y, 0.0f), size, color, rotation, rotation_angle);
+}
+
+void Renderer2D::drawRect(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture> texture, 
+				const glm::vec3& rotation, const float rotation_angle){
+	drawRect(glm::vec3(position.x, position.y, 0.0f), size, texture, rotation, rotation_angle);
+}

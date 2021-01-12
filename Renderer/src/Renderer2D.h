@@ -27,11 +27,19 @@ public:
     //Rectangle drawing
     static void drawRect(const glm::vec3& position, const glm::vec2& size);
     static void drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color);
+    static void drawRect(const glm::vec3& position, const glm::vec2& size, const glm::vec3& color,
+								const glm::vec3& rotation, const float rotation_angle);
     static void drawRect(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture> texture);
+    static void drawRect(const glm::vec3& position, const glm::vec2& size, const std::shared_ptr<Texture> texture, 
+								const glm::vec3& rotation, const float rotation_angle);
 
     static void drawRect(const glm::vec2& position, const glm::vec2& size);
     static void drawRect(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color);
+    static void drawRect(const glm::vec2& position, const glm::vec2& size, const glm::vec3& color, 
+                                const glm::vec3& rotation, const float rotation_angle);
     static void drawRect(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture> texture);
+    static void drawRect(const glm::vec2& position, const glm::vec2& size, const std::shared_ptr<Texture> texture, 
+                                const glm::vec3& rotation, const float rotation_angle);
 private:
 
     static std::shared_ptr<VertexArray> va;

@@ -43,23 +43,20 @@ void newInterface(std::shared_ptr<Window> window) {
 	std::shared_ptr<Texture> Mario = Texture::create("res/textures/Mario.png");
 	Renderer2D::init();
 	Camera camera = Camera();
-	camera.setFixedTarget(glm::vec3(0, 0, 0));
-	camera.setPosition(glm::vec3(0, 5.0, 3.0));
+//	camera.setFixedTarget(glm::vec3(0, 0, 0));
 	float x = 0;
 	float y = 0;
 	while (window->isOpen()) {
 		// closeOnEnter(window);
-		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_LEFT) == GLFW_PRESS) x -= 1;
-		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_RIGHT) == GLFW_PRESS) x += 1;
-		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_UP) == GLFW_PRESS) y += 1;
-		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_DOWN) == GLFW_PRESS) y -= 1;
-
-		camera.setRoll(x);
-		camera.setPitch(y);
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_LEFT) == GLFW_PRESS) x += 0.1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_RIGHT) == GLFW_PRESS) x -= 0.1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_UP) == GLFW_PRESS) y -= 0.1;
+		if (glfwGetKey((GLFWwindow*)(window->getBaseWindow()), GLFW_KEY_DOWN) == GLFW_PRESS) y += 0.1;
+		camera.setPosition(glm::vec3(x, y, 3.0f));
 		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		RenderCommand::clear();
 		Renderer2D::startScene(camera);
-		Renderer2D::drawRect(glm::vec2(-0.5, 0), glm::vec2(1.0f, 1.0f), Mario);
+		Renderer2D::drawRect(glm::vec2(-0.5, 0), glm::vec2(1.0f, 1.0f), Mario, glm::vec3(0.0f, 0.0f, 1.0f), -90.0f);
 		Renderer2D::drawRect(glm::vec2(0.5, 0), glm::vec2(1.0f, 1.0f), Mario);
 		Renderer2D::endScene();
 		window->swapBuffers();
