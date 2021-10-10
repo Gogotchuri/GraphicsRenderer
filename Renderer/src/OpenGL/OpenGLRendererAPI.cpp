@@ -9,9 +9,7 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 
-OpenGLRendererAPI::~OpenGLRendererAPI(){
-	glfwTerminate();
-}
+OpenGLRendererAPI::~OpenGLRendererAPI(){}
 void OpenGLRendererAPI::init(){
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);

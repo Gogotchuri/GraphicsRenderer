@@ -23,6 +23,7 @@ int main(void)
 {
 	srand(time(nullptr));
 	std::shared_ptr<Window> window = Window::create(800, 600, "New Window");
+	window->setVSync(true);
 	newInterface(window);
 	return 0;
 }
@@ -48,7 +49,7 @@ void newInterface(std::shared_ptr<Window> window) {
 		Renderer2D::drawRect(glm::vec2(-0.5, 0), glm::vec2(1.0f, 1.0f), Mario, glm::vec3(0.0f, 0.0f, 1.0f), -90.0f);
 		Renderer2D::drawRect(glm::vec2(0.5, 0), glm::vec2(1.0f, 1.0f), Mario);
 		Renderer2D::endScene();
-		window->swapBuffers();
+		window->onUpdate();
 		// glfwPollEvents();
 	}
 	// glfwTerminate();

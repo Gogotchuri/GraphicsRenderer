@@ -1,5 +1,12 @@
 #include <OpenGL/GLWindow.h>
 #include <assert.h>
+#include <slogger/slogger.h>
+
+GLWindow::~GLWindow() {
+	glfwDestroyWindow(window);
+	glfwTerminate();
+	SLOGGER_INFO("window destroyed");
+}
 
 GLWindow::GLWindow(unsigned int width, unsigned int height, const char * name) {
     /* Initialize the library */
@@ -47,10 +54,16 @@ void GLWindow::close() {
     glfwSetWindowShouldClose(window, true);
 }
 
-void GLWindow::swapBuffers() {
+void GLWindow::onUpdate() {
     glfwSwapBuffers(window);
+	glfwPollEvents();
 }
 
 void * GLWindow::getBaseWindow() {
 	return (void *)window;
+}
+
+void GLWindow::setVSync(bool vsync) {
+	if(vsync) glfwSwapInterval(1);
+	else glfwSwapInterval(0);
 }

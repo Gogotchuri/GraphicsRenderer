@@ -10,8 +10,10 @@ public:
     virtual ~Window() = default;
     virtual bool isOpen() = 0;
     virtual void close() = 0;
-    virtual void swapBuffers() = 0;
+    virtual void onUpdate() = 0;
     virtual void * getBaseWindow() = 0;
+
+    virtual void setVSync(bool) = 0;
 
     static std::shared_ptr<Window> create(unsigned int width, unsigned int height, const char * name);
 };
