@@ -6,9 +6,11 @@
  */
 
 #include "OpenGLRendererAPI.h"
+#include <glad/glad.h>
+#include <GLFW/glfw3.h>
 
 OpenGLRendererAPI::~OpenGLRendererAPI(){
-
+	glfwTerminate();
 }
 void OpenGLRendererAPI::init(){
 	glEnable(GL_BLEND);

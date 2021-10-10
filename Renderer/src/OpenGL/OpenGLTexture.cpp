@@ -1,6 +1,6 @@
 #include "OpenGLTexture.h"
 #include <glad/glad.h>
-#include "vendor/stb_image/stb_image.h"
+#include <stb_image/stb_image.h>
 #include <assert.h>
 #include <slogger/slogger.h>
 

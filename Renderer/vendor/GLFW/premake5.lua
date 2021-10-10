@@ -42,9 +42,6 @@ project "GLFW"
 			"_GLFW_X11"
 		}
 
-	configuration { "linux", "gmake" }
-		linkoptions { "-lglfw3 -lrt -lXrandr -lXinerama -lXi -lXcursor -lGL -lm -ldl -lXrender -ldrm -lXdamage -lX11-xcb -lxcb-glx -lxcb-dri2 -lxcb-dri3 -lxcb-present -lxcb-sync -lxshmfence -lXxf86vm -lXfixes -lXext -lX11 -lpthread -lxcb -lXau -lXdmcp" }
-
 	filter "system:windows"
 		systemversion "latest"
 		staticruntime "On"

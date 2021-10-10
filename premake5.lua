@@ -5,7 +5,6 @@ workspace "Renderer"
 	configurations{ "Debug", "Release" }
 
 	flags{ "MultiProcessorCompile" }
-	--system { "windows", "linux"}
 
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
@@ -26,6 +25,13 @@ project "Renderer"
 
 	files
 	{
+		"%{prj.location}/vendor/slogger/**.h",
+		"%{prj.location}/vendor/slogger/**.cpp",
+		"%{prj.location}/vendor/stb_image/**.h",
+		"%{prj.location}/vendor/stb_image/**.cpp",
+		"%{prj.location}/vendor/glm/**.hpp",
+		"%{prj.location}/vendor/glm/**.inl",
+		
 		"%{prj.location}/src/**.h",
 		"%{prj.location}/src/**.cpp",
 		"%{prj.location}/src/**.c",
@@ -35,9 +41,9 @@ project "Renderer"
 	includedirs
 	{
 		"%{prj.location}/src",
-		"%{prj.location}/src/vendor",
-		"Renderer/vendor/GLFW/include",
-		"Renderer/vendor/GLAD/include"
+		"%{prj.location}/vendor",
+		"%{prj.location}/vendor/GLFW/include",
+		"%{prj.location}/vendor/GLAD/include"
 	}
 
 	links
@@ -66,11 +72,6 @@ project "Renderer"
 			"_GLFW_X11",
 			"RENDER_PLATFORM_LINUX_"
 		}
-
-		links{"X11", "GL", "GLU"}
-
-	configuration { "linux", "gmake" }
-		linkoptions {"-lX11 -lpthread -ldl"}
 		
 project "Sandbox"
 		location "Sandbox"
@@ -93,9 +94,7 @@ project "Sandbox"
 		includedirs
 		{
 			"Renderer/src",
-			"Renderer/src/vendor",
-			"Renderer/vendor/GLFW/include",
-			"Renderer/vendor/GLAD/include"
+			"Renderer/vendor"
 		}
 	
 		links
@@ -107,7 +106,7 @@ project "Sandbox"
 
 		configuration { "linux", "gmake" }
 			linkoptions {"-lX11 -lpthread -ldl"}
-	
+
 		filter "system:windows"
 			systemversion "latest"
 	
