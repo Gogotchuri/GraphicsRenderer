@@ -14,7 +14,7 @@ OpenGLTexture::OpenGLTexture(const std::string& filepath)
 		SLOGGER_ERROR("Texture isn't on the filepath: " + filepath);
 		assert(false);
 	}
-
+	std::cout <<  width << height << std::endl;
 	glGenTextures(1, &gl_texture_id);
 	bind();
 	//TODO Exception handling

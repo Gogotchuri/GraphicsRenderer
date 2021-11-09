@@ -1,1 +1,1 @@
-include_directories(../Renderer/src)
+include_directories(../Gozel/src)

@@ -60,7 +60,7 @@ private:
 
 class OrthographicCamera{
 public:
-    OrthographicCamera(float left, float right, float bottom, float top, float near_plane = -1.0, float far_plane = 1.0);
+    OrthographicCamera(float left=1, float right=-1, float bottom=-1, float top=1, float near_plane = -1.0, float far_plane = 1.0);
 	~OrthographicCamera();
 
 	void setPosition(const glm::vec3 position);

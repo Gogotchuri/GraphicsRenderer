@@ -1,6 +1,6 @@
-workspace "Renderer"
+workspace "Gozel"
 	architecture "x64"
-	startproject "Renderer"
+	startproject "Gozel"
 
 	configurations{ "Debug", "Release" }
 
@@ -9,12 +9,12 @@ workspace "Renderer"
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 group "Dependencies"
-	include "Renderer/vendor/GLFW"
-	include "Renderer/vendor/GLAD"
+	include "Gozel/vendor/GLFW"
+	include "Gozel/vendor/GLAD"
 group ""
 
-project "Renderer"
-	location "Renderer"
+project "Gozel"
+	location "Gozel"
 	kind "StaticLib"
 	language "C++"
 	cppdialect "C++17"
@@ -40,7 +40,7 @@ project "Renderer"
 
 	includedirs
 	{
-		"%{prj.location}/src",
+		"%{prj.location}/src/*",
 		"%{prj.location}/vendor",
 		"%{prj.location}/vendor/GLFW/include",
 		"%{prj.location}/vendor/GLAD/include"
@@ -93,13 +93,13 @@ project "Sandbox"
 	
 		includedirs
 		{
-			"Renderer/src",
-			"Renderer/vendor"
+			"Gozel/src/*",
+			"Gozel/vendor"
 		}
 	
 		links
 		{
-			"Renderer",
+			"Gozel",
 			"GLFW",
 			"GLAD"
 		}

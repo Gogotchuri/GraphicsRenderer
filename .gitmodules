@@ -1,3 +1,3 @@
-[submodule "Renderer/vendor/GLFW"]
-	path = Renderer/vendor/GLFW
+[submodule "Gozel/vendor/GLFW"]
+	path = Gozel/vendor/GLFW
 	url = https://github.com/Gogotchuri/glfw
