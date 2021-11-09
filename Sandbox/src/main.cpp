@@ -30,7 +30,7 @@ int main(void)
 
 void newInterface(std::shared_ptr<Window> window) {
 	//std::shared_ptr<Texture> giraffe_tex = Texture::create("res/textures/Giraffe.jpg");
-	std::shared_ptr<Texture> Mario = Texture::create("res/textures/Mariam.jpg");
+	// std::shared_ptr<Texture> Mario = Texture::create("res/textures/Mariam.jpg");
 	Renderer2D::init();
 	Camera camera = Camera();
 	camera.setFixedTarget(glm::vec3(0, 0, 0));
@@ -39,7 +39,7 @@ void newInterface(std::shared_ptr<Window> window) {
 		RenderCommand::setClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 		RenderCommand::clear();
 		Renderer2D::startScene(camera);
-		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(2.0f, 2.0f), Mario);
+		Renderer2D::drawRect(glm::vec2(0, 0), glm::vec2(2.0f, 2.0f), glm::vec4(0.6f, 1.0f, 0.3f, 1.0f));
 		Renderer2D::endScene();
 		window->onUpdate();
 	}
